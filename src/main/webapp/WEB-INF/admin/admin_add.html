@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>云科技</title>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
+    <script src="/js/jquery-3.2.1.js"></script>
+    <script language="javascript" type="text/javascript">
+        //保存成功的提示消息
+        function showResult() {
+            showResultDiv(true);
+            window.setTimeout("showResultDiv(false);", 3000);
+            window.setTimeout('location.href = "admin_list"',3000)
+        }
+        function showResultDiv(flag) {
+            var divResult = document.getElementById("save_result_info");
+            if (flag)
+                divResult.style.display = "block";
+            else
+                divResult.style.display = "none";
+        }
+        $(document).ready(function () {
+            $.ajax({
+                url: "/AdminFindAll",
+                success: function (result) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var stu = result.data[i];
+                        var roleId = $("<li></li>").append(
+                                "<input type='checkbox' name='inp0' value='" + stu.roleId + "'/>"+stu.roleName);
+                        $("#ul").append(roleId);
+                    }
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="header">
+    <img src="../images/logo.png" alt="logo" class="left"/>
+    <a onclick="exitlog()">[退出]</a>
+</div>
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a onclick="backRole()" class="role_off"></a></li>
+        <li><a href="admin_list.html" class="admin_on"></a></li>
+        <li><a href="../fee/fee_list.html" class="fee_off"></a></li>
+        <li><a href="../account/account_list.html" class="account_off"></a></li>
+        <li><a href="../service/service_list.html" class="service_off"></a></li>
+        <li><a href="../bill/bill_list.html" class="bill_off"></a></li>
+        <li><a href="../report/report_list.html" class="report_off"></a></li>
+        <li><a href="../user/user_info.html" class="information_off"></a></li>
+        <li><a href="../user/user_modi_pwd.html" class="password_off"></a></li>
+    </ul>
+</div>
+<div id="main">
+    <div id="save_result_info" class="save_success">保存成功 3秒后跳转主页面！</div>
+    <form action="" method="" class="main_form">
+        <div class="text_info clearfix"><span>姓名：</span></div>
+        <div class="input_info">
+            <input type="text" id="name1"/>
+            <div class="validate_msg_long" id="div1"></div>
+        </div>
+        <div class="text_info clearfix"><span>管理员账号：</span></div>
+        <div class="input_info">
+            <input type="text" id="code1"/>
+            <div class="validate_msg_long" id="div2"></div>
+        </div>
+        <div class="text_info clearfix"><span>密码：</span></div>
+        <div class="input_info">
+            <input type="password" id="pwd"/>
+            <div class="validate_msg_long" id="div3"></div>
+        </div>
+        <div class="text_info clearfix"><span>重复密码：</span></div>
+        <div class="input_info">
+            <input type="password" id="rePwd"/>
+            <div class="validate_msg_long " id="div4"></div>
+        </div>
+        <div class="text_info clearfix"><span>电话：</span></div>
+        <div class="input_info">
+            <input type="text" class="width200" id="tele"/>
+            <div class="validate_msg_medium " id="div5"></div>
+        </div>
+        <div class="text_info clearfix"><span>Email：</span></div>
+        <div class="input_info">
+            <input type="text" class="width200" id="email"/>
+            <div class="validate_msg_medium " id="div6"></div>
+        </div>
+        <div class="text_info clearfix"><span>角色：</span></div>
+        <div class="input_info_high">
+            <div class="input_info_scroll">
+                <ul id="ul">
+                </ul>
+            </div>
+            <div class="validate_msg_tiny " id="div7"></div>
+        </div>
+        <div class="button_info clearfix">
+            <input type="button" value="保存" class="btn_save" id="btn_save"/>
+            <input type="button" value="取消" class="btn_save"
+                   onclick="location.reload();javascript:window.history.back(-1)"/>
+        </div>
+    </form>
+</div>
+<div id="footer">
+    <span>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</span>
+    <br/>
+    <span>版权所有(C)云科技有限公司 </span>
+</div>
+</body>
+<script>
+    $("#btn_save").click(function () {
+        var n = [];
+        var roleId = $('input[name=inp0]');
+        for (var i = 0; i < roleId.length; i++) {
+            if (roleId[i].checked) {
+                n.push(roleId[i].value);
+            }
+        }
+        if (n.length == 0) {
+            n.push(0)
+        }
+        $.ajax({
+            url: "/addAdmin",
+            traditional: true,
+            data: {
+                "name": $("#name1").val(),
+                "adminCode": $("#code1").val(),
+                "Pwd": $("#pwd").val(),
+                "rePwd": $("#rePwd").val(),
+                "telephone": $("#tele").val(),
+                "email": $("#email").val(),
+                "roleId": n,
+            },
+            success: function (result) {
+                if (result == "nameNull") {
+                    document.getElementById("div1").innerHTML = "小伙子,你的名字呢?让狗吃了啊"
+                }else if (result == "rePwdNull") {
+                    document.getElementById("div4").innerHTML = "小伙子,两次密码不一样啊,还不能是空的啊"
+                }else if (result == "nameExist") {
+                    document.getElementById("div1").innerHTML = "名字已存在,请查证后在写"
+                }else if (result == "nameLength") {
+                    document.getElementById("div1").innerHTML = "3~8个字母之间"
+                } else if (result == "codeNull") {
+                    document.getElementById("div2").innerHTML = "账号不能为空"
+                } else if (result == "phoneError") {
+                    document.getElementById("div5").innerHTML = "正确的电话格式:手机"
+                } else if (result == "emailError") {
+                    document.getElementById("div6").innerHTML = "正确的email格式"
+                } else if (result == "pwdError") {
+                    document.getElementById("div3").innerHTML = "密码不能为空"
+                } else if (result == "roleError"){
+                    document.getElementById("div7").innerHTML = "至少选择一个角色"
+                } else if (result == "add") {
+                    document.getElementById("div1").innerHTML = '';
+                    document.getElementById("div2").innerHTML = '';
+                    document.getElementById("div3").innerHTML = '';
+                    document.getElementById("div4").innerHTML = '';
+                    document.getElementById("div5").innerHTML = '';
+                    document.getElementById("div6").innerHTML = '';
+                    document.getElementById("div7").innerHTML = '';
+                    showResult()
+                }
+            }
+        })
+    })
+    function backRole() {
+        window.location.href = "role"
+    }
+    function exitlog() {
+        window.location.href = "exit";
+    }
+</script>
+</html>
