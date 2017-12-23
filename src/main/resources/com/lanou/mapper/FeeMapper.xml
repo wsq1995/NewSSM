@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanou.mapper.FeeMapper">
+    <resultMap id="feeMap" type="Fee">
+        <id column="cost_id" property="costId"/>
+        <result column="name" property="name"/>
+        <result column="base_duration" property="baseDuration"/>
+        <result column="base_cost" property="baseCost"/>
+        <result column="unit_cost" property="unitCost"/>
+        <result column="status" property="status"/>
+        <result column="creatime" property="creatime"/>
+        <result column="startime" property="startime"/>
+        <result column="cost_type" property="costType"/>
+    </resultMap>
+
+    <!--查询所有资费-->
+    <select id="findAllfees" resultMap="feeMap">
+        <if test="value == 1">
+            SELECT * FROM cost ORDER BY base_duration
+        </if>
+        <if test="value == 2">
+            SELECT * FROM cost ORDER BY base_duration DESC
+        </if>
+        <if test="value == 3">
+            SELECT * FROM cost ORDER BY base_cost
+        </if>
+        <if test="value == 4">
+            SELECT * FROM cost ORDER BY base_cost DESC
+        </if>
+    </select>
+
+    <!--添加资费-->
+    <insert id="addFee">
+        INSERT INTO cost (name ,cost_type,base_duration,base_cost,unit_cost,status,descr)VALUES(#{name},#{costType},#{baseCost},#{baseDuration},#{unitCost},#{status},#{descr})
+    </insert>
+
+    <!--资费回显-->
+    <select id="findCostById" resultMap="feeMap">
+        SELECT * FROM cost WHERE cost_id = #{costId}
+    </select>
+
+    <!--查名字-->
+    <select id="findFeeByName" resultMap="feeMap">
+        SELECT c.name FROM cost c WHERE name = #{name}
+    </select>
+
+    <!--修改资费-->
+    <update id="updateFee">
+        UPDATE cost
+        SET name = #{name},
+            cost_type = #{costType},
+            base_duration = #{baseDuration},
+            base_cost = #{baseCost},
+            unit_cost = #{unitCost},
+            descr = #{descr}
+        where cost_id = #{costId}
+    </update>
+
+    <!--修改资费状态-->
+    <update id="updateStatus">
+        UPDATE cost SET status = 1,startime = #{startime} where cost_id = #{costId}
+    </update>
+
+    <!--查找资费详情-->
+    <select id="findDetail" resultMap="feeMap">
+        SELECT * FROM cost WHERE cost_id = #{costId}
+    </select>
+
+    <!--查找状态-->
+    <select id="findStatusById" resultMap="feeMap">
+        SELECT status FROM cost WHERE cost_id = #{costId}
+    </select>
+
+    <!--删除资费-->
+    <delete id="deleteFee">
+        DELETE FROM cost WHERE cost_id = #{costId}
+    </delete>
+
+
+
+</mapper>
