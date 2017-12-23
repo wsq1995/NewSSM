@@ -2,7 +2,6 @@ package com.lanou.service;
 
 import com.lanou.domain.Admin;
 import com.lanou.domain.AdminRole;
-import com.lanou.domain.AdminRoleModule;
 import com.lanou.domain.Module;
 
 import java.util.List;
@@ -40,6 +39,8 @@ public interface AdmainService {
     List<Module> findAllModule(Module module);
 
     //    五个表的高级查询
-    List<Admin> findAllARM(int moduleId,String roleName);
+    List<Admin> findAllARM(int moduleId, String roleName);
 
+    //    根据adminId查询权限id
+    List<Admin> findModuleIdByAdminId(int adminId);
 }

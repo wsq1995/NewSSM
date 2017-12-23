@@ -68,7 +68,7 @@ public class RoleController {
     }
 
     //回显名字
-    @RequestMapping(value = "/echo", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/echoRole", produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String echo(HttpSession session) {
         int roleId = (int) session.getAttribute("roleId");

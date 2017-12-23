@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
  */
 @Service
 public class AdmainServiceImpl implements AdmainService {
+
     @Resource
     private AdminMapper adminMapper;
 
@@ -28,12 +29,18 @@ public class AdmainServiceImpl implements AdmainService {
         String adminCode = admin.getAdminCode();
         String pwd = admin.getPwd();
         String newVerifyCode = (String) session.getAttribute("verifyCode");
+        List<Admin> login = adminMapper.login(admin);
+        if (login.size() != 0){
+            session.setAttribute("login",login.get(0));
+        }
         if (adminCode == null || adminCode.equals("") && adminCode.equals(admin.getAdminCode())) {
             return "nameError";
         } else if (pwd == null || pwd.equals("") && pwd.equals(admin.getPwd())) {
             return "PwdError";
         } else if (!verifyCode.equalsIgnoreCase(newVerifyCode) && newVerifyCode != null && !newVerifyCode.equals("")) {
             return "codeError";
+        } else if (login.size() == 0) {
+            return "adminError";
         }
         return "index";
     }
@@ -58,7 +65,7 @@ public class AdmainServiceImpl implements AdmainService {
             return "pwdError";
         } else if (adminMapper.findAdminName().size() != 0) {
             return "nameExit";
-        } else if (!Pattern.compile("^1[3|4|5|7|8][0-9]{9}$").matcher(admin.getTelephone()).matches()) {
+        } else if (!Pattern.compile("^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\\\d{8})|(0\\\\d{2}-\\\\d{8})|(0\\\\d{3}-\\\\d{7})$").matcher(admin.getTelephone()).matches()) {
             return "phoneError";
         } else if (!Pattern.compile("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$").matcher(admin.getEmail()).matches()) {
             return "emailError";
@@ -105,6 +112,7 @@ public class AdmainServiceImpl implements AdmainService {
     //    高级查询
     @Override
     public List<Admin> findAllARM(int moduleId, String roleName) {
+//        set会自动去重
         Set<Integer> adminIds = new HashSet<>();
         List<Admin> admin = new ArrayList<>();
         if (moduleId == -1 && roleName.equals("")) {
@@ -150,7 +158,6 @@ public class AdmainServiceImpl implements AdmainService {
                     }
                 }
             }
-
             for (Integer adminId : adminIds) {
                 admin.addAll(adminMapper.findAllAdmin(adminId));
             }
@@ -161,7 +168,6 @@ public class AdmainServiceImpl implements AdmainService {
 
     @Override
     public String updateA(Admin admin, Integer[] role) {
-
         if (admin.getName().equals("") || admin.getName() == null) {
             return "nameNull";
         } else if (admin.getName().length() >= 20 || !Pattern.compile("[a-zA-Z]{3,8}").matcher(admin.getName()).matches()) {
@@ -183,6 +189,11 @@ public class AdmainServiceImpl implements AdmainService {
             }
             return "add";
         }
+    }
+
+    @Override
+    public List<Admin> findModuleIdByAdminId(int adminId) {
+        return adminMapper.findMouduleIdByAdminId(adminId);
     }
 
 }

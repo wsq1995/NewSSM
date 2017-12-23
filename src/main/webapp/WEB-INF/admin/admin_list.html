@@ -148,7 +148,7 @@
         <li><a href="../index.html" class="index_off"></a></li>
         <li><a id="a2" class="role_off"></a></li>
         <li><a class="admin_on"></a></li>
-        <li><a href="../fee/fee_list.html" class="fee_off"></a></li>
+        <li><a onclick="fee()" class="fee_off"></a></li>
         <li><a href="../account/account_list.html" class="account_off"></a></li>
         <li><a href="../service/service_list.html" class="service_off"></a></li>
         <li><a href="../bill/bill_list.html" class="bill_off"></a></li>
@@ -223,7 +223,7 @@
                     window.location.href = "role"
             }
         })
-    })
+    });
 
     function addAdmin() {
         window.location.href = "adminAdd"
@@ -241,6 +241,9 @@
                 }
             }
         })
+    }
+    function fee() {
+        window.location.href = "feeList"
     }
 </script>
 </html>

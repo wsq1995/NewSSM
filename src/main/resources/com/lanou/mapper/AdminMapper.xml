@@ -34,29 +34,6 @@
         <result column="module_name" property="moduleName"/>
     </resultMap>
 
-    <!--高级查询的map-->
-    <resultMap id="ARMMap" type="AdminRoleModule">
-
-        <id column="admin_id" property="adminId"/>
-        <result column="name" property="name"/>
-        <result column="admin_code" property="adminCode"/>
-        <result column="password" property="Pwd"/>
-        <result column="telephone" property="telephone"/>
-        <result column="email" property="email"/>
-        <result column="enrolldate" property="enrolldate"/>
-        <association property="role" javaType="Role">
-            <id column="role_id" property="roleId"/>
-            <result column="role_name" property="roleName"/>
-        </association>
-        <association property="adminRole" javaType="AdminRole">
-            <id column="admin_id" property="adminId"/>
-            <result column="role_id" property="roleId"/>
-        </association>
-        <association property="module" javaType="Module">
-            <id column="module_id" property="moduleId"/>
-            <result column="module_name" property="moduleName"/>
-        </association>
-    </resultMap>
 
     <resultMap id="roleModuleMap" type="RoleModule">
         <id column="role_id" property="roleId"/>
@@ -67,15 +44,15 @@
         <result column="role_id" property="roleId"/>
         <result column="role_name" property="roleName"/>
 
-        <!--<association property="module" javaType="Module">-->
-            <!--<id column="module_id" property="moduleId"/>-->
-            <!--<result column="module_Name" property="moduleName"/>-->
-        <!--</association>-->
+        <association property="module" javaType="Module">
+            <id column="module_id" property="moduleId"/>
+            <result column="module_Name" property="moduleName"/>
+        </association>
 
-        <!--<association property="roleModule" javaType="RoleModule">-->
-            <!--<id column="role_id" property="roleId"/>-->
-            <!--<result column="module_id" property="moduleId"/>-->
-        <!--</association>-->
+        <association property="roleModule" javaType="RoleModule">
+            <id column="role_id" property="roleId"/>
+            <result column="module_id" property="moduleId"/>
+        </association>
     </resultMap>
 
 
@@ -83,7 +60,7 @@
     <select id="login" resultMap="adminMap">
         SELECT *
         FROM admin_info
-        WHERE admin_code = #{adminCode}
+        WHERE admin_code = #{adminCode} and password = #{Pwd}
     </select>
 
     <!--查询所有管理员-->
@@ -107,35 +84,6 @@
             </where>
         GROUP BY a.admin_id
     </select>
-
-    <!--高级查询-->
-    <select id="findAllARM" resultMap="ARMMap">
-        SELECT
-        ai.admin_id admin_id,
-        ai.admin_code admin_code,
-        ai.password password,
-        ai.name name,
-        ai.telephone telephone,
-        ai.email email,
-        ai.enrolldate enrolldate,
-        group_concat(DISTINCT ri.role_name SEPARATOR ',') role_name,
-        group_concat(DISTINCT mi.module_Name SEPARATOR ',') module_name
-        FROM admin_info ai LEFT JOIN (admin_role ar, module_info mi, role_info ri, role_module rm)
-        ON ai.admin_id = ar.admin_id
-        AND ar.role_id = ri.role_id
-        AND ri.role_id = rm.role_id
-        AND rm.module_id = mi.module_id
-        <where>
-            <if test="param1 != -1">
-                and mi.module_id = #{param1}
-            </if>
-            <if test="!param2.equals('%%')">
-                and ri.role_name like #{param2}
-            </if>
-        </where>
-        GROUP BY ai.admin_id
-    </select>
-
 
     <!--根据id查询名字-->
     <select id="findAdminName" resultMap="adminMap">
@@ -193,6 +141,8 @@
         FROM module_info
     </select>
 
+    <!--=========================高级查询========================-->
+
     <!--通过权限id查询角色id-->
     <select id="findRoleIdByModuleId" resultMap="roleModuleMap">
         SELECT * FROM role_module WHERE module_id = #{value}
@@ -207,6 +157,11 @@
     <select id="findroleIdByRoleName" resultMap="roleMap">
         SELECT * FROM role_info WHERE role_name LIKE #{value}
     </select>
+
+
+    <!--<select id="findMouduleIdByAdminId" resultMap="">-->
+        <!---->
+    <!--</select>-->
 
 
 </mapper>

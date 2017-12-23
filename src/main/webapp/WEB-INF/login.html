@@ -24,8 +24,9 @@
                             document.getElementById('PwdError').innerHTML = '密码不能为空'
                         } else if (result == 'codeError') {
                             document.getElementById('codeError').innerHTML = '验证码不能为空'
-                        }
-                        if (result == 'index') {
+                        }else if (result == 'adminError'){
+                            document.getElementById('nameError').innerHTML = '账号密码错误'
+                        }if (result == 'index') {
                             window.location.href = "index"
                         }
 

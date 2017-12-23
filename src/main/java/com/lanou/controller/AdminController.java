@@ -15,7 +15,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dllo on 17/12/7.
@@ -23,7 +25,7 @@ import java.util.List;
 @Controller
 public class AdminController {
 
-    @Resource()
+    @Resource
     private AdmainService admainService;
 
     @RequestMapping("/login")
@@ -142,13 +144,20 @@ public class AdminController {
     //    高级查询
     @RequestMapping(value = "/findAllARM")
     @ResponseBody
-    public AjaxResult findAllARM(String roleName,int moduleId) {
+    public AjaxResult findAllARM(String roleName, int moduleId) {
         try {
-            roleName = new String(roleName.getBytes("8859_1"),"utf8");
+            roleName = new String(roleName.getBytes("8859_1"), "utf8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return new AjaxResult(admainService.findAllARM(moduleId,roleName));
+        return new AjaxResult(admainService.findAllARM(moduleId, roleName));
+    }
+
+    @RequestMapping("/findAllM")
+    public Set<Integer> findAllM(HttpSession session) {
+        Admin login = (Admin) session.getAttribute("login");
+        admainService.findModuleIdByAdminId(login.getAdminId());
+        return null;
     }
 
 }

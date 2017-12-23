@@ -1,9 +1,7 @@
 package com.lanou.mapper;
 
 import com.lanou.domain.Admin;
-import com.lanou.domain.AdminRole;
 import com.lanou.domain.Module;
-import com.lanou.domain.RoleModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -26,7 +24,9 @@ public class AdminMapperTest {
     @Test
     public void login() throws Exception {
         Admin admin = new Admin();
-        adminMapper.login(admin);
+        admin.setAdminCode("admin");
+        admin.setPwd("123");
+        System.out.println(adminMapper.login(admin));
     }
 
     @Test
@@ -66,11 +66,6 @@ public class AdminMapperTest {
     @Test
     public void findAllModule() throws Exception {
         adminMapper.findAllModule(new Module()).forEach(System.out::println);
-    }
-
-    @Test
-    public void findAllARM() throws Exception {
-        adminMapper.findAllARM(-1, "%%").forEach(System.out::println);
     }
 
     @Test

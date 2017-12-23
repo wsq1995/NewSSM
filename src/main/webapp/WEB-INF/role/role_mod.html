@@ -27,7 +27,7 @@
         $(document).ready(function () {
             $.ajax({
                 type: "POST",
-                url: "/echo",
+                url: "/echoRole",
                 success: function (result) {
                     $("#in").val(result)
                 }
@@ -102,13 +102,13 @@
     <div class="input_info_high">
         <div class="input_info_scroll">
             <ul>
-                <li><input type="checkbox" name="inp0" id="inp1" value=1/>管理员管理</li>
-                <li><input type="checkbox" name="inp0" id="inp2" value=2/>角色管理</li>
-                <li><input type="checkbox" name="inp0" id="inp3" value=3/>资费管理</li>
-                <li><input type="checkbox" name="inp0" id="inp4" value=4/>账务账号</li>
-                <li><input type="checkbox" name="inp0" id="inp5" value=5/>业务账号</li>
-                <li><input type="checkbox" name="inp0" id="inp6" value=6/>账单</li>
-                <li><input type="checkbox" name="inp0" id="inp7" value=7/>报表</li>
+                <li><input type="checkbox" name="inp0" id="inp1" value="1"/>管理员管理</li>
+                <li><input type="checkbox" name="inp0" id="inp2" value="2"/>角色管理</li>
+                <li><input type="checkbox" name="inp0" id="inp3" value="3"/>资费管理</li>
+                <li><input type="checkbox" name="inp0" id="inp4" value="4"/>账务账号</li>
+                <li><input type="checkbox" name="inp0" id="inp5" value="5"/>业务账号</li>
+                <li><input type="checkbox" name="inp0" id="inp6" value="6"/>账单</li>
+                <li><input type="checkbox" name="inp0" id="inp7" value="7"/>报表</li>
             </ul>
         </div>
         <!--<div class="validate_msg_tiny">至少选择一个权限</div>-->

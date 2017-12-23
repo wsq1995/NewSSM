@@ -11,7 +11,7 @@ import java.util.Set;
 public interface AdminMapper {
 
     //    查询名字
-    Admin login(Admin admin);
+    List<Admin> login(Admin admin);
 
     //    查询所有管理员
     List<Admin> findAllAdmin(int adminId);
@@ -43,8 +43,7 @@ public interface AdminMapper {
     //    高级查询显示权限
     List<Module> findAllModule(Module module);
 
-    //    五个表的高级查询
-    List<AdminRoleModule> findAllARM(int moduleId, String roleName);
+//    ===================高级查询==========================
 
     //通过权限id查询角色id
     List<RoleModule> findRoleIdByModuleId(int moduleId);
@@ -54,4 +53,10 @@ public interface AdminMapper {
 
     //    通过角色名字查询角色id
     List<Role> findroleIdByRoleName(String roleName);
+
+
+//    ===================根据权限不同显示不同图标===========================
+
+    List<Admin> findMouduleIdByAdminId(int adminId);
+
 }
